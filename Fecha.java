@@ -12,7 +12,7 @@ public class Fecha{
     private int anho;
     //private List<String> fechas;
     
-    public Fecha(int dia, int mes, int anho){
+    public Fecha(int dia, int mes, int anho){ 
         assert anho >= 1582;
         if(anho == 1582){
             assert mes >= 10;
