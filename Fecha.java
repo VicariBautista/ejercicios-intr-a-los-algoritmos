@@ -11,17 +11,6 @@ public class Fecha{
     private int mes;
     private int anho;    
     public Fecha(int dia, int mes, int anho){ 
-        assert anho >= 1582;
-        if(anho == 1582){
-            assert mes >= 10;
-        } else{
-            assert mes >= 0 && mes <= 12;
-        }
-        if(anho == 1582){
-            assert dia >= 15;
-        } else{
-            assert dia > 0 ;
-        }
         assert fechaValida(dia, mes, anho);
         this.dia = dia;
         this.mes = mes;
@@ -65,9 +54,16 @@ public class Fecha{
     }
     
     private boolean fechaValida(int dia, int mes, int anho){
-        if(anho < 1582) return false;
-        if(mes <= 0 || mes > 12) return false;
-        if(cantidadDias(mes, anho) < dia)return false;
+        assert anho >= 1582;
+        if(anho == 1582){
+            assert mes >= 10;
+        } else{
+            assert mes >= 0 && mes <= 12;
+        } if(anho == 1582){
+            assert dia >= 15;
+        } else{
+            assert dia > 0 && dia <= cantidadDias(mes, anho);
+        }
         return true;
     }
     
@@ -105,5 +101,57 @@ public class Fecha{
         if(dia > 10 && mes < 10) fecha = dia + "/0" + mes + "/" + anho;
         if(dia > 10 && mes >= 10)fecha = dia + "/" + mes + "/" + anho;
         return fecha;
+    }
+    
+    public boolean equals(Fecha otraFecha){
+        //Si el dia, mes y anho son iguales retorna true sino false.
+        return this.dia == otraFecha.obtenerDia() 
+        && this.mes == otraFecha.obtenerMes() 
+        && this.anho == otraFecha.obtenerAnho();
+    }
+    
+    public boolean esAnterior(Fecha otraFecha){
+        if(this.anho < otraFecha.obtenerAnho()){
+            return true;
+        } else{
+            if(this.anho > otraFecha.obtenerAnho()){
+                return false;
+            } else{
+                if(this.mes < otraFecha.obtenerMes()){
+                    return true;
+                } else{
+                    if(this.mes > otraFecha.obtenerMes()){
+                        return false;
+                    }else {
+                        if(this.dia < otraFecha.obtenerDia()){
+                            return true;    
+                        } else{
+                            return false;
+                            }
+                        }
+                    }
+                }    
+            }    
+    }
+    
+    public int distancia(Fecha otraFecha){
+        int contadorDias = 0;
+        int diaAct = this.dia;
+        int mesAct = this.mes;
+        int anhoAct = this.anho;
+        while(diaAct != otraFecha.obtenerDia() || mesAct != otraFecha.obtenerMes() || anhoAct != otraFecha.obtenerAnho()){
+            contadorDias++;
+            if(diaAct != otraFecha.cantidadDias(mesAct, anhoAct)){
+                diaAct++;
+            } else{
+                diaAct = 1;
+                mesAct++;
+            }
+            if(mesAct > 12){
+                anhoAct ++;
+                mesAct = 1;
+            }
+        }
+        return contadorDias;
     }
 }
